@@ -7,6 +7,7 @@
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate && cp .all-contributorsrc ./src/_data/contributors.json",
     "start": "eleventy --config=config/eleventy.config.js --serve --port 9090 --quiet",
+    "test:translation": "node scripts/test-translation-system.js",
     "translate": "node scripts/incremental-translate.js",
     "translate:all": "node scripts/translate.js",
     "translate:arabic": "node scripts/translate.js arabic",
