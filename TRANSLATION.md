@@ -2,6 +2,42 @@
 
 This project uses Google Gemini AI to automatically translate the Front-end Developer Interview Questions into multiple languages.
 
+## Workflow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     AUTOMATED TRANSLATION FLOW                   │
+└─────────────────────────────────────────────────────────────────┘
+
+1. Developer updates questions:
+   └─> Edit src/questions/*.md
+       └─> Commit & push to main/master
+
+2. GitHub Actions triggered:
+   └─> Detects changes in src/questions/
+       └─> Runs incremental translation
+           ├─> Analyzes git diff
+           ├─> Extracts changed context
+           ├─> Translates via Gemini AI
+           └─> Updates src/translations/*/README.md
+
+3. Pull Request created:
+   └─> Review translations
+       └─> Merge to apply updates
+
+┌─────────────────────────────────────────────────────────────────┐
+│                     MANUAL TRANSLATION FLOW                      │
+└─────────────────────────────────────────────────────────────────┘
+
+Developer runs command:
+├─> npm run translate           (incremental - changed content)
+├─> npm run translate:all       (full - all languages)
+└─> npm run translate:{lang}    (full - specific language)
+    └─> Translates directly
+        └─> Files updated locally
+            └─> Commit & push changes
+```
+
 ## Setup
 
 1. **Get a Gemini API Key**
