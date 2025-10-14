@@ -57,9 +57,12 @@ jobs:
           if [ -n "${{ github.event.inputs.language }}" ]; then
             echo "Translating to specific language: ${{ github.event.inputs.language }}"
             npm run translate:${{ github.event.inputs.language }}
-          else
-            echo "Translating to all languages"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual trigger - translating to all languages (full translation)"
             npm run translate:all
+          else
+            echo "Auto-translating changed content only (incremental)"
+            node scripts/incremental-translate.js
           fi
       
       - name: Check for translation changes

@@ -25,6 +25,14 @@ You can read more about this project & its history [here](https://h5bp.org/Front
   2. [How to Contribute](https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/master/.github/CONTRIBUTING.md)
   3. [License](https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/master/LICENSE.md)
 
+## Translations
+
+Translations are automatically maintained using Google Gemini AI. See the [Translation Guide](TRANSLATION.md) for details.
+
+**Available translations:**
+- [View all translations](/src/translations)
+- Translation automation uses Google Gemini to keep translations in sync with English source
+- Translations are automatically updated when questions change
 
 The project is currently maintained by:
 

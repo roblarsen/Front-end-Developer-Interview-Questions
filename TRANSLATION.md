@@ -21,13 +21,31 @@ This project uses Google Gemini AI to automatically translate the Front-end Deve
 
 ## Usage
 
+### Incremental Translation (Recommended)
+
+When you have made changes to question files and want to translate only the changed content:
+
+```bash
+npm run translate
+```
+
+This will:
+- Detect changes in `src/questions/` files using git diff
+- Extract the changed context (sentences/paragraphs)
+- Translate only the changed content to all languages
+- Update the translation files in place
+
+This is the most cost-effective approach as it only translates what has changed.
+
 ### Translate All Languages
 
-To translate the questions to all supported languages:
+To translate the questions to all supported languages (full translation):
 
 ```bash
 npm run translate:all
 ```
+
+**Note**: This will translate the entire document for all languages, which may take longer and use more API credits.
 
 ### Translate to a Specific Language
 
@@ -80,16 +98,19 @@ Available languages:
 
 The translation system automatically triggers when:
 
-1. **Changes to Question Files**: When you push changes to files in `src/questions/`, the GitHub Action workflow automatically:
-   - Detects the changes
-   - Translates all affected content to all supported languages
+1. **Changes to Question Files** (Incremental Translation): When you push changes to files in `src/questions/`, the GitHub Action workflow automatically:
+   - Detects the specific changes using git diff
+   - Extracts the changed context (minimizing content to translate)
+   - Translates only the changed sentences/paragraphs to all supported languages
+   - Updates the translation files in place
    - Creates a Pull Request with the translations
 
-2. **Manual Trigger**: You can manually trigger translations from the GitHub Actions tab:
+2. **Manual Trigger** (Full or Specific Translation): You can manually trigger translations from the GitHub Actions tab:
    - Go to the "Actions" tab in GitHub
    - Select "Auto Translate Questions"
    - Click "Run workflow"
    - Optionally specify a single language to translate
+   - If no language is specified, it will do a full translation of all content
 
 ## How It Works
 
@@ -103,15 +124,22 @@ The translation system automatically triggers when:
    - Maintaining document structure
 4. **Output**: Writes translated README.md files to `src/translations/{language}/`
 
-### Smart Translation (Future Enhancement)
+### Smart Translation (Implemented)
 
-The current implementation translates the entire document. A future enhancement will include:
+The system implements intelligent incremental translation:
 
-- **Word-level changes**: If only a word is changed, translate the containing sentence
-- **Sentence-level changes**: If a sentence is changed, translate the whole paragraph
-- **Paragraph-level changes**: If a paragraph is changed, translate the entire section
+- **Incremental Mode** (`npm run translate`): Detects git changes and translates only modified content
+  - Uses git diff to find changed lines
+  - Extracts sentence/paragraph context around changes
+  - Translates minimal content to reduce API costs
+  - Updates existing translation files in place
 
-This minimizes API calls and translation costs.
+- **Full Mode** (`npm run translate:all`): Translates entire documents
+  - Useful for new languages or major restructuring
+  - Combines all questions into comprehensive README format
+  - Generates complete translation files from scratch
+
+The incremental mode is automatically used by the GitHub Actions workflow when questions are changed, minimizing translation costs while ensuring accuracy.
 
 ## Configuration
 
@@ -122,8 +150,9 @@ Languages are configured in `scripts/language-mapping.json`. Each entry maps a d
 ### Translation Scripts
 
 - `scripts/translator.js`: Core Gemini AI translation wrapper
-- `scripts/translate.js`: Main translation orchestration script
-- `scripts/diff-utils.js`: Utilities for detecting changes (for future smart translation)
+- `scripts/translate.js`: Full translation orchestration (translates entire documents)
+- `scripts/incremental-translate.js`: Incremental translation (translates only changes)
+- `scripts/diff-utils.js`: Utilities for detecting changes and extracting context
 - `scripts/language-mapping.json`: Language directory to name mapping
 
 ## GitHub Actions
